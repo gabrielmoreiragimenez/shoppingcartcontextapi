@@ -34,9 +34,20 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   const addProduct = async (productId: number) => {
     try {
-      // TODO
+      const productCar = cart.find(element => element.id === productId);
+
+      if (productCar) {
+        productCar.amount += 1;
+        return
+      }
+
+      const { data } = await api.get(`/products/${productId}`)
+
+      data.amount = 1
+
+      setCart([...cart, data])
     } catch {
-      // TODO
+      toast.error('Erro na adição do produto');
     }
   };
 
